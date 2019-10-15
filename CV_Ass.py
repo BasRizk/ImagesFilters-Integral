@@ -55,8 +55,8 @@ def average_filter(org_img_array, filter_size = 3):
 #    image_array = np.array(image_pw)
     print(org_img_array)
     
-#    filtered_img_array = org_img_array
-    filtered_img_array = np.zeros([org_img_array.shape[0], org_img_array.shape[1]])
+    filtered_img_array = org_img_array
+#    filtered_img_array = np.zeros([org_img_array.shape[0], org_img_array.shape[1]])
     filter_padding = filter_size - 1
     for i in range(0, org_img_array.shape[0] - filter_padding):
         for j in range(0, org_img_array.shape[1] - filter_padding):
@@ -96,7 +96,7 @@ org_img_array = np.array(gray_img)
 # =============================================================================
 int_img_array = compute_integral_image(org_img_array)
 int_img = Image.fromarray(int_img_array)
-int_img.save("Camera_Int.jpg")
+int_img.convert("I").save("Camera_Int.tif")
 
 # =============================================================================
 # Testing average_filter with filter size of 3,then 5
