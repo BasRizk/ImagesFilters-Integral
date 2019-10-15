@@ -49,17 +49,17 @@ def compute_integral_image(org_img_array):
     
     return int_img_array
     
-def average_filter(image_array, filter_size = 3): 
+def average_filter(org_img_array, filter_size = 3): 
     print("About to apply averaging filter, using Integral Image computation")
 #    image_pw = Image.open(gray_img)
 #    image_array = np.array(image_pw)
-    print(image_array)
+    print(org_img_array)
     
-#    new_image_array = np.zeros([image_array.shape[0], image_array.shape[1]])
+#    filtered_img_array = org_img_array
+    filtered_img_array = np.zeros([org_img_array.shape[0], org_img_array.shape[1]])
     filter_padding = filter_size - 1
-    
-    for i in range(0, image_array.shape[0] - filter_padding):
-        for j in range(0, image_array.shape[1] - filter_padding):
+    for i in range(0, org_img_array.shape[0] - filter_padding):
+        for j in range(0, org_img_array.shape[1] - filter_padding):
             
             
             to_be_filtered_frame = np.zeros([filter_size, filter_size])
@@ -67,22 +67,16 @@ def average_filter(image_array, filter_size = 3):
             for filter_i in range(0, filter_size):
                 for filter_j in range(0, filter_size):
                     to_be_filtered_frame[filter_i][filter_j] =\
-                        image_array[i + filter_i][j + filter_j]
-                    
-#            print(to_be_filtered_frame)
-            
+                        org_img_array[i + filter_i][j + filter_j]
+                                
             filtered_frame = compute_integral_image(to_be_filtered_frame)
             
-            for filter_i in range(0, filter_size):
-                for filter_j in range(0, filter_size):
-                    image_array[i + filter_i][ j + filter_j] =\
-                        filtered_frame[filter_i][filter_j]
-                            
-            #new_image_array[i:][j] = image_array[i][j]
-    
-    filtered_image = Image.fromarray(image_array)
-    filtered_image = filtered_image.convert("L")
-    return image_array, filtered_image
+            filtered_img_array[i+filter_size//2][j+filter_size//2] =\
+                filtered_frame[filter_size-1][filter_size-1]//(filter_size**2)
+                
+    filtered_img = Image.fromarray(filtered_img_array)
+    filtered_img = filtered_img.convert("L")
+    return filtered_img_array, filtered_img
 
 # =============================================================================
 # Initializations
@@ -101,12 +95,16 @@ org_img_array = np.array(gray_img)
 # Testing only compute_integral_image function
 # =============================================================================
 int_img_array = compute_integral_image(org_img_array)
+int_img = Image.fromarray(int_img_array)
+int_img.save("Camera_Int.jpg")
 
 # =============================================================================
-# Testing average_filter with filter size of 3,then 4
+# Testing average_filter with filter size of 3,then 5
 # =============================================================================
 array_3, image_3 = average_filter(org_img_array,3)
-array_4, image_4 = average_filter(org_img_array,4)
+array_5, image_5 = average_filter(org_img_array,5)
+image_3.save("Camera_Filt_3.jpg")
+image_5.save("Camera_Filt_5.jpg")
 
 #filtered_img = increaseContrast(gray_img,30,20,180,230)
 #filtered_img2 = increaseContrast(original_img,70,20,140,240)
