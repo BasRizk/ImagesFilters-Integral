@@ -67,8 +67,9 @@ def average_filter(org_img_array, filter_size = 3):
             for filter_i in range(0, filter_size):
                 for filter_j in range(0, filter_size):
                     to_be_filtered_frame[filter_i][filter_j] =\
-                        org_img_array[i + filter_i][j + filter_j]
-                                
+                        filtered_img_array[i + filter_i][j + filter_j]
+#                        org_img_array[i + filter_i][j + filter_j]
+
             filtered_frame = compute_integral_image(to_be_filtered_frame)
             
             filtered_img_array[i+filter_size//2][j+filter_size//2] =\
