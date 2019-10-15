@@ -1,0 +1,2 @@
+First Image Contrast is : 12932148
+Second Image Contrast is : 27223823
