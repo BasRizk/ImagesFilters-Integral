@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 #import matplotlib.image as mpimg
 from PIL import Image
 
@@ -48,32 +48,24 @@ def compute_integral_image(org_img_array):
             int_img_array[i][j] = int_img_array[i-1][j] + int_img_array[i][j] 
     
     return int_img_array
-    
-def average_filter(org_img_array, filter_size = 3): 
-    print("About to apply averaging filter, using Integral Image computation")
-#    image_pw = Image.open(gray_img)
-#    image_array = np.array(image_pw)
-    print(org_img_array)
-    
-    filtered_img_array = org_img_array
-#    filtered_img_array = np.zeros([org_img_array.shape[0], org_img_array.shape[1]])
-    filter_padding = filter_size - 1
-    for i in range(0, org_img_array.shape[0] - filter_padding):
-        for j in range(0, org_img_array.shape[1] - filter_padding):
-            
-            
-            to_be_filtered_frame = np.zeros([filter_size, filter_size])
-            
-            for filter_i in range(0, filter_size):
-                for filter_j in range(0, filter_size):
-                    to_be_filtered_frame[filter_i][filter_j] =\
-                        filtered_img_array[i + filter_i][j + filter_j]
-#                        org_img_array[i + filter_i][j + filter_j]
 
-            filtered_frame = compute_integral_image(to_be_filtered_frame)
+def average_filter_using_int_image_array(int_img_array, filter_size = 3): 
+    print("About to apply averaging filter, using Integral Image computation")
+    print(int_img_array)
+        
+    filtered_img_array = np.zeros([int_img_array.shape[0], int_img_array.shape[1]], dtype=int)
+    filter_padding = filter_size//2
+    for i in range(filter_padding + 1, int_img_array.shape[0] - filter_padding - 1):
+        for j in range(filter_padding + 1, int_img_array.shape[1] - filter_padding - 1):
             
-            filtered_img_array[i+filter_size//2][j+filter_size//2] =\
-                filtered_frame[filter_size-1][filter_size-1]//(filter_size**2)
+            cummulative_diff =\
+                    int_img_array[i+filter_padding][j+filter_padding] +\
+                    int_img_array[i-filter_padding-1][j-filter_padding-1] -\
+                    int_img_array[i+filter_padding][j-filter_padding-1] -\
+                    int_img_array[i-filter_padding-1][j+filter_padding]
+            cummulative_diff = cummulative_diff / (filter_size**2)
+#            print(cummulative_diff)
+            filtered_img_array[i][j] = cummulative_diff
                 
     filtered_img = Image.fromarray(filtered_img_array)
     filtered_img = filtered_img.convert("L")
@@ -102,8 +94,8 @@ int_img.convert("I").save("Camera_Int.tif")
 # =============================================================================
 # Testing average_filter with filter size of 3,then 5
 # =============================================================================
-array_3, image_3 = average_filter(org_img_array,3)
-array_5, image_5 = average_filter(org_img_array,5)
+array_3, image_3 = average_filter_using_int_image_array(int_img_array,3)
+array_5, image_5 = average_filter_using_int_image_array(int_img_array,5)
 image_3.save("Camera_Filt_3.jpg")
 image_5.save("Camera_Filt_5.jpg")
 
