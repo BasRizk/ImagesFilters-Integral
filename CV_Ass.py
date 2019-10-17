@@ -74,22 +74,39 @@ def average_filter_using_int_image_array(int_img_array, filter_size = 3):
 # =============================================================================
 # Initializations
 # =============================================================================
-img_filepath = "Cameraman_noise.bmp"
+img_filepath = "C:/Cameraman_noise.bmp"
+original_img = Image.open("C:/Ocean.bmp")
 gray_img = Image.open(img_filepath)
 org_img_array = np.array(gray_img)
 
 # =============================================================================
-# Testing only increase_contrast function
+# Plotting increase_contrast on first set of values and printing its contrast value
 # =============================================================================
 
-# TODO
+contrast_image_1 = increase_contrast(original_img,30,20,180,230)
+contrast_value_1 = compute_contrast(contrast_image_1)
+print("First Image Contrast is : " + str(contrast_value_1))
+contrast_image_1.save("Ocean_a.bmp")
+
+# =============================================================================
+# Plotting increase_contrast on second set of values and printing its contrast value
+# =============================================================================
+
+contrast_image_2 = increase_contrast(original_img,70,20,140,240)
+contrast_value_2 = compute_contrast(contrast_image_2)
+print("Second Image Contrast is : " + str(contrast_value_2))
+contrast_image_2.save("Ocean_b.bmp")
 
 # =============================================================================
 # Testing only compute_integral_image function
 # =============================================================================
 int_img_array = compute_integral_image(org_img_array)
-int_img = Image.fromarray(int_img_array)
-int_img.convert("I").save("Camera_Int.tif")
+integral_fig = plt.figure(figsize=(20,20))
+integral_fig.suptitle('Integral Image')
+plt.plot()
+plt.imshow(int_img_array, cmap='Greys_r')
+plt.show()
+#After plotting the image we save it as jpg
 
 # =============================================================================
 # Testing average_filter with filter size of 3,then 5
@@ -99,30 +116,11 @@ array_5, image_5 = average_filter_using_int_image_array(int_img_array,5)
 image_3.save("Camera_Filt_3.jpg")
 image_5.save("Camera_Filt_5.jpg")
 
-#filtered_img = increaseContrast(gray_img,30,20,180,230)
-#filtered_img2 = increaseContrast(original_img,70,20,140,240)
-#integral_img = computeIntegralImage(third_img)
-#contrast = computeContrast(filtered_img)
-#contrast2 = computeContrast(filtered_img2)
-#print(contrast)
-#print(contrast2)
-#print(np_img[30][30])
-#integral_img = Image.fromarray(np_img, 'L')
-
-#print(np_img[0])
-#plt.figure(figsize=(20,20))
-#plt.subplot(2,2,1)
-#plt.imshow(filtered_img, cmap='Greys_r')
-#plt.subplot(2,2,2)
-#plt.imshow(filtered_img2, cmap='Greys_r')
-
-#uncomment these lines to draw the integral image 
-
-#plt.plot()
-#plt.imshow(integral_img, cmap='Greys_r')
-#plt.show()
 
 
 
-#original_img = gray_img.copy()
-#third_img = gray_img.copy()
+
+
+
+
+
